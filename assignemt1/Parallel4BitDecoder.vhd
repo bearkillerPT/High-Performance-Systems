@@ -1,10 +1,11 @@
--- decoder of one bit
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 
 LIBRARY simpleLogic;
 USE simpleLogic.all;
 
+-- decoder of one bit
 ENTITY bit_decoder IS
   PORT (i_x0, i_x1, i_x2, i_x3, i_x4, i_x5, i_x6, i_x7: IN  STD_LOGIC;
         o_m: OUT STD_LOGIC;
@@ -84,6 +85,81 @@ BEGIN
 	
 END structure;
 
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+LIBRARY simpleLogic;
+USE simpleLogic.all;
+
+LIBRARY Parallel4BitEncoder;
+USE Parallel4BitEncoder.all;
+
+LIBRARY PopCounter8bit;
+USE PopCounter8bit.all;
+
+
+ENTITY m3_bit_decoder IS
+	PORT (m     : IN STD_LOGIC_VECTOR(3 downto 0);
+			y     : IN STD_LOGIC_VECTOR(7 downto 0);
+			m3    : OUT STD_LOGIC;
+			valid : IN STD_LOGIC);
+END m3_bit_decoder;
+
+ARCHITECTURE structure OF m3_bit_decoder IS
+
+	SIGNAL c: STD_LOGIC_VECTOR (3 downto 0);
+	SIGNAL Z: STD_LOGIC_VECTOR (7 downto 0);
+	SIGNAL PopCounter: STD_LOGIC_VECTOR(7 downto 0);
+	SIGNAL XorC2C3: STD_LOGIC;
+	SIGNAL XorValidC2C3: STD_LOGIC;
+	SIGNAL XorZ0Y0, XorZ1Y1, XorZ2Y2, XorZ3Y3, XorZ4Y4, XorZ5Y5, XorZ6Y6, XorZ7Y7: STD_LOGIC;
+	
+	
+	COMPONENT gateAnd2
+		PORT (x1, x2 : IN  STD_LOGIC;
+				y:			OUT STD_LOGIC);
+	END COMPONENT;
+	
+	COMPONENT gateXor2
+		PORT (x1, x2 : IN  STD_LOGIC;
+				y:			OUT STD_LOGIC);
+	END COMPONENT;
+	
+	COMPONENT Parallel4BitEncoder
+		PORT (m: IN  STD_LOGIC_VECTOR(3 downto 0);
+				x:	OUT STD_LOGIC_VECTOR(7 downto 0));
+	END COMPONENT;
+	
+	COMPONENT PopCounter8bit
+		PORT (d : IN  STD_LOGIC_VECTOR(7 downto 0);
+				c : OUT STD_LOGIC_VECTOR(3 downto 0));
+	END COMPONENT;
+
+BEGIN
+	
+	
+	z_e : Parallel4BitEncoder PORT MAP (m,z);
+	
+	m_XorZ0Y0 : gateXor2 PORT MAP(z(7),y(7),XorZ7Y7);
+	m_XorZ1Y1 : gateXor2 PORT MAP(z(6),y(6),XorZ6Y6);
+	m_XorZ2Y2 : gateXor2 PORT MAP(z(5),y(5),XorZ5Y5);
+	m_XorZ3Y3 : gateXor2 PORT MAP(z(4),y(4),XorZ4Y4);
+	m_XorZ4Y4 : gateXor2 PORT MAP(z(3),y(3),XorZ3Y3);
+	m_XorZ5Y5 : gateXor2 PORT MAP(z(2),y(2),XorZ2Y2);
+	m_XorZ6Y6 : gateXor2 PORT MAP(z(1),y(1),XorZ1Y1);
+	m_XorZ7Y7 : gateXor2 PORT MAP(z(0),y(0),XorZ0Y0);
+	
+	 
+	PopCounter <= XorZ7Y7 & XorZ6Y6 & XorZ6Y6 & XorZ4Y4 & XorZ3Y3 & XorZ2Y2 & XorZ1Y1 & XorZ0Y0;
+	
+	--m_c : PopCounter8bit (PopCounter,c);
+	
+	m_XorC2C3 : gateXor2 PORT MAP(c(3),c(2),XorC2C3);
+	
+	m_XorValidC2C3 :  gateXor2 PORT MAP(valid,XorC2C3,m3);
+	
+END structure;
+
 
 -- complete decoder
 LIBRARY ieee;
@@ -97,6 +173,8 @@ ENTITY Parallel4BitDecoder IS
         m: OUT STD_LOGIC_VECTOR(3 downto 0);
 		  v: OUT STD_LOGIC);
 END Parallel4BitDecoder;
+
+-- m3 bit
 
 ARCHITECTURE structure OF Parallel4BitDecoder IS
 	
@@ -134,7 +212,12 @@ ARCHITECTURE structure OF Parallel4BitDecoder IS
 				o_m: OUT STD_LOGIC;
 				o_v: OUT STD_LOGIC);
 	END COMPONENT;
-	
+	COMPONENT m3_bit_decoder
+	PORT (m     : IN STD_LOGIC_VECTOR(3 downto 0);
+			y     : IN STD_LOGIC_VECTOR(7 downto 0);
+			m3    : OUT STD_LOGIC;
+			valid : IN STD_LOGIC);
+	END COMPONENT;
 BEGIN
 
 	-- m3 computations
@@ -147,8 +230,7 @@ BEGIN
 	m1	: bit_decoder PORT MAP (x(0), x(4), x(1), x(5), x(2), x(6), x(3), x(7), m1_o, m1_v);
 
 	-- m0 computations
-	m0_o <= '0';
-	m0_v <= '1';
+	m0 : m3_bit_decoder PORT MAP (m3_o & m2_o & m1_o & '0', x, m0_o, m0_v);
 	-- final results
 	m <= m3_o & m2_o & m1_o & m0_o;
 	valid		: gateAnd4 PORT MAP(m3_v, m2_v, m1_v, m0_v, v);
