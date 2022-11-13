@@ -11,11 +11,11 @@ END halfAdder_1bit;
 
 ARCHITECTURE structure OF halfAdder_1bit IS
   COMPONENT gateAnd2
-    PORT (x0, x1: IN STD_LOGIC;
+    PORT (x1, x2: IN STD_LOGIC;
           y: OUT STD_LOGIC);
   END COMPONENT;
   COMPONENT gateXOr2
-    PORT (x0, x1: IN STD_LOGIC;
+    PORT (x1, x2: IN STD_LOGIC;
           y: OUT STD_LOGIC);
   END COMPONENT;
 BEGIN
@@ -37,15 +37,15 @@ END fullAdder_1bit;
 ARCHITECTURE structure OF fullAdder_1bit IS
   SIGNAL z0, z1, z2: STD_LOGIC;
   COMPONENT gateAnd2
-    PORT (x0, x1: IN STD_LOGIC;
+    PORT (x1, x2: IN STD_LOGIC;
           y: OUT STD_LOGIC);
   END COMPONENT;
   COMPONENT gateOr2
-    PORT (x0, x1: IN STD_LOGIC;
+    PORT (x1, x2: IN STD_LOGIC;
           y: OUT STD_LOGIC);
   END COMPONENT;
   COMPONENT gateXOr2
-    PORT (x0, x1: IN STD_LOGIC;
+    PORT (x1, x2: IN STD_LOGIC;
           y: OUT STD_LOGIC);
   END COMPONENT;
 BEGIN
@@ -70,11 +70,11 @@ END fullAdderCLA_1bit;
 ARCHITECTURE structure OF fullAdderCLA_1bit IS
   SIGNAL z0: STD_LOGIC;
   COMPONENT gateAnd2
-    PORT (x0, x1: IN STD_LOGIC;
+    PORT (x1, x2: IN STD_LOGIC;
           y: OUT STD_LOGIC);
   END COMPONENT;
   COMPONENT gateXOr2
-    PORT (x0, x1: IN STD_LOGIC;
+    PORT (x1, x2: IN STD_LOGIC;
           y: OUT STD_LOGIC);
   END COMPONENT;
 BEGIN
