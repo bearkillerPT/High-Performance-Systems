@@ -12,7 +12,7 @@ USE arithmetic.all;
 
 ENTITY PopCounter8bit IS
   PORT (d: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-        c: OUT STD_LOGIC_VECTOR (2 DOWNTO 0));
+        c: OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
 END PopCounter8bit;
 
 ARCHITECTURE structure OF PopCounter8bit IS
@@ -42,5 +42,5 @@ BEGIN
   fA10: fullAdderWoCI_2bit PORT MAP (iSg0(1 DOWNTO 0),   iSg0(3 DOWNTO 2),   iSg1(1 DOWNTO 0),   iSg1(2));
   fA11: fullAdderWoCI_2bit PORT MAP (iSg0(5 DOWNTO 4),   iSg0(7 DOWNTO 6),   iSg1(4 DOWNTO 3),   iSg1(5));
 -- stage 2
-  fA20: fullAdderWoCI_3bit PORT MAP (iSg1(2 DOWNTO 0),   iSg1(5 DOWNTO 3),    c(1 DOWNTO 0), c(2));
+  fA20: fullAdderWoCI_3bit PORT MAP (iSg1(2 DOWNTO 0),   iSg1(5 DOWNTO 3),    c(2 DOWNTO 0), c(3));
 END structure;

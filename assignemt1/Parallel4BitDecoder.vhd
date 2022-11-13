@@ -150,9 +150,9 @@ BEGIN
 	m_XorZ7Y7 : gateXor2 PORT MAP(z(0),y(0),XorZ0Y0);
 	
 	 
-	PopCounter <= XorZ7Y7 & XorZ6Y6 & XorZ6Y6 & XorZ4Y4 & XorZ3Y3 & XorZ2Y2 & XorZ1Y1 & XorZ0Y0;
+	PopCounter <= XorZ7Y7 & XorZ6Y6 & XorZ5Y5 & XorZ4Y4 & XorZ3Y3 & XorZ2Y2 & XorZ1Y1 & XorZ0Y0;
 	
-	--m_c : PopCounter8bit (PopCounter,c);
+	m_c : PopCounter8bit PORT MAP(PopCounter,c);
 	
 	m_XorC2C3 : gateXor2 PORT MAP(c(3),c(2),XorC2C3);
 	
