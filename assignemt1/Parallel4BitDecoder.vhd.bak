@@ -1,0 +1,112 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+ENTITY bit_decoder IS
+  PORT (y0,y1,y2,y3,y4,y5,y6,t7: IN STD_LOGIC;
+        o_valid:   OUT STD_LOGIC;
+        o_m: OUT STD_LOGIC);
+END bit_decoder;
+
+ARCHITECTURE structure OF bit_decoder IS
+	
+	-- signals
+	SIGNAL m: STD_LOGIC_VECTOR (3 downto 0); -- m3 m2 m1 m0
+	SIGNAL mAnd23, mOr10, mAnd10, mOr23: STD_LOGIC;
+	SIGNAL mNAnd23, mNor10, mNAnd10, mNOr23: STD_LOGIC;
+	SIGNAL mOneC1, mOneC2, mZeroC1, mZeroC2: STD_LOGIC;
+	SIGNAL mZero, mOne: STD_LOGIC;
+
+	-- gates
+	COMPONENT gateXor
+		PORT (x1, x2: IN STD_LOGIC;
+		      y     : OUT STD_LOGIC)
+	END COMPONENT;
+	
+	COMPONENT gateAnd
+		PORT (x1, x2: IN STD_LOGIC;
+		      y     : OUT STD_LOGIC)
+	END COMPONENT;
+	
+	COMPONENT gateOr
+		PORT (x1, x2: IN STD_LOGIC;
+		      y     : OUT STD_LOGIC)
+	END COMPONENT;
+	
+	COMPONENT gateNAnd
+		PORT (x1, x2: IN STD_LOGIC;
+		      y     : OUT STD_LOGIC)
+	END COMPONENT;
+	
+	COMPONENT gateNOr
+		PORT (x1, x2: IN STD_LOGIC;
+		      y     : OUT STD_LOGIC)
+	END COMPONENT;
+	
+	COMPONENT gateNot
+		PORT (x     : IN STD_LOGIC;
+		      y     : OUT STD_LOGIC)
+	END COMPONENT;
+
+BEGIN
+	
+	
+	-- beginning xor operations
+	m0    : gateXor  PORT MAP (yo, y1, m(0));
+	m1    : gateXor  PORT MAP (y2, y3, m(1));
+	m2    : gateXor  PORT MAP (y4, y5, m(2));
+	m3    : gateXor  PORT MAP (y6, y7, m(3));
+
+	
+	-- Calculations for One
+	
+	m_And10 : gateAnd PORT MAP(m(1), m(0), mAnd10); --C1C0
+	m-And23 : gateAnd PORT MAP(m(2), m(3), mAnd23); --C2C3
+	m_Or10  : gateOr PORT MAP(m(1), m(0), mOr10); -- C1 + C0
+	m_Or23  :  gateOr PORT MAP(m(1), m(0), mOr23);-- C2 + C3
+	
+	
+	-- Calculations for Zero
+	m_NAnd10 : gateNot PORT MAP(mAnd10, mNAnd10); -- ~C1~C0 
+	m_NAnd23 : gateNot PORT MAP(mAnd23, mNand23); -- ~C2~C3
+	m_NOr10  : gateNot PORT MAP(mOr10, mNOr10); -- ~C0 + ~C1
+	m_NOr23  : gateNot PORT MAP(mOr23, mNor23); --  ~C2 + ~C3
+	
+	-- One calculations
+	m1C1    : gateAnd PORT MAP(mAnd23, mOr10, mOneC1); -- C2C3 (C1 + C0)
+	m1C2 	: gateAnd PORT MAP(mAnd10, mOr23, mOneC2); -- C1C0 (C2 + C3)
+	m1 	: gateOr PORT MAP(mOneC1,mOneC2, mOne); -- C2C3 (C1 + C0) + C1C0 (C2 + C3)
+	
+	-- Zero calculations
+	m0C1	: gateAnd PORT MAP(mNand10, mNor23, mZeroC1); -- ~C1~C0 (~C2 + ~C3)
+	m0C2	: gateAnd PORT MAP(mNan23, mNor10, mZeroC2); -- ~C2~C3 (~C0 + ~C1)
+	m0 	: gateOr PORT MAP(mZeroC1,mZeroC2, mZero); -- ~C1~C0 (~C2 + ~C3) + ~C2~C3 (~C0 + ~C1)
+	
+	-- Valid 
+	
+	mvalid : gateXor PORT MAP (mZero, mOne, o_valid);
+	
+	-- Foward one signal
+	
+	o_m <= mOne;
+END structure;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

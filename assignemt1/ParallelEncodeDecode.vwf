@@ -1,16 +1,16 @@
 /*<simulation_settings>
-<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off Assignment1 -c Assignment1 --vector_source="C:/intelFPGA_lite/20.1/assignemt1/parallelEncoder.vwf" --testbench_file="C:/intelFPGA_lite/20.1/assignemt1/simulation/modelsim/parallelEncoder.vwf.vht"</ftestbench_cmd>
-<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off Assignment1 -c Assignment1 --vector_source="C:/intelFPGA_lite/20.1/assignemt1/parallelEncoder.vwf" --testbench_file="C:/intelFPGA_lite/20.1/assignemt1/simulation/qsim/parallelEncoder.vwf.vht"</ttestbench_cmd>
+<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off Assignment1 -c Assignment1 --vector_source="C:/intelFPGA_lite/20.1/assignemt1/ParallelEncodeDecode.vwf" --testbench_file="C:/intelFPGA_lite/20.1/assignemt1/simulation/qsim/Waveform.vwf.vht"</ftestbench_cmd>
+<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off Assignment1 -c Assignment1 --vector_source="C:/intelFPGA_lite/20.1/assignemt1/Waveform.vwf" --testbench_file="C:/intelFPGA_lite/20.1/assignemt1/simulation/qsim/Waveform.vwf.vht"</ttestbench_cmd>
 <fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory="C:/intelFPGA_lite/20.1/assignemt1/simulation/qsim/" Assignment1 -c Assignment1</fnetlist_cmd>
 <tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=vhdl --output_directory="C:/intelFPGA_lite/20.1/assignemt1/simulation/qsim/" Assignment1 -c Assignment1</tnetlist_cmd>
 <modelsim_script>onerror {exit -code 1}
 vlib work
 vcom -work work Assignment1.vho
-vcom -work work parallelEncoder.vwf.vht
-vsim -c -t 1ps -L cyclonev -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.Parallel4BitEncoder_vhd_vec_tst
+vcom -work work Waveform.vwf.vht
+vsim -c -t 1ps -L cyclonev -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.parallelEncodeDecode_vhd_vec_tst
 vcd file -direction Assignment1.msim.vcd
-vcd add -internal Parallel4BitEncoder_vhd_vec_tst/*
-vcd add -internal Parallel4BitEncoder_vhd_vec_tst/i1/*
+vcd add -internal parallelEncodeDecode_vhd_vec_tst/*
+vcd add -internal parallelEncodeDecode_vhd_vec_tst/i1/*
 proc simTimestamp {} {
     echo "Simulation time: $::now ps"
     if { [string equal running [runStatus]] } {
@@ -20,16 +20,15 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
-
 </modelsim_script>
 <modelsim_script_timing>onerror {exit -code 1}
 vlib work
 vcom -work work Assignment1.vho
-vcom -work work parallelEncoder.vwf.vht
-vsim -novopt -c -t 1ps -sdfmax Parallel4BitEncoder_vhd_vec_tst/i1=Assignment1_vhd.sdo -L cyclonev -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.Parallel4BitEncoder_vhd_vec_tst
+vcom -work work Waveform.vwf.vht
+vsim -novopt -c -t 1ps -sdfmax parallelEncodeDecode_vhd_vec_tst/i1=Assignment1_vhd.sdo -L cyclonev -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.parallelEncodeDecode_vhd_vec_tst
 vcd file -direction Assignment1.msim.vcd
-vcd add -internal Parallel4BitEncoder_vhd_vec_tst/*
-vcd add -internal Parallel4BitEncoder_vhd_vec_tst/i1/*
+vcd add -internal parallelEncodeDecode_vhd_vec_tst/*
+vcd add -internal parallelEncodeDecode_vhd_vec_tst/i1/*
 proc simTimestamp {} {
     echo "Simulation time: $::now ps"
     if { [string equal running [runStatus]] } {
@@ -39,7 +38,6 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
-
 </modelsim_script_timing>
 <hdl_lang>vhdl</hdl_lang>
 </simulation_settings>*/
@@ -78,7 +76,7 @@ HEADER
 	GRID_DUTY_CYCLE = 50;
 }
 
-SIGNAL("m")
+SIGNAL("mIn")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = BUS;
@@ -88,137 +86,107 @@ SIGNAL("m")
 	PARENT = "";
 }
 
-SIGNAL("m[3]")
+SIGNAL("mIn[3]")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = INPUT;
-	PARENT = "m";
+	PARENT = "mIn";
 }
 
-SIGNAL("m[2]")
+SIGNAL("mIn[2]")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = INPUT;
-	PARENT = "m";
+	PARENT = "mIn";
 }
 
-SIGNAL("m[1]")
+SIGNAL("mIn[1]")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = INPUT;
-	PARENT = "m";
+	PARENT = "mIn";
 }
 
-SIGNAL("m[0]")
+SIGNAL("mIn[0]")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = INPUT;
-	PARENT = "m";
+	PARENT = "mIn";
 }
 
-SIGNAL("x")
+SIGNAL("mOut")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = BUS;
-	WIDTH = 8;
+	WIDTH = 4;
 	LSB_INDEX = 0;
 	DIRECTION = OUTPUT;
 	PARENT = "";
 }
 
-SIGNAL("x[7]")
+SIGNAL("mOut[3]")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = OUTPUT;
-	PARENT = "x";
+	PARENT = "mOut";
 }
 
-SIGNAL("x[6]")
+SIGNAL("mOut[2]")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = OUTPUT;
-	PARENT = "x";
+	PARENT = "mOut";
 }
 
-SIGNAL("x[5]")
+SIGNAL("mOut[1]")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = OUTPUT;
-	PARENT = "x";
+	PARENT = "mOut";
 }
 
-SIGNAL("x[4]")
+SIGNAL("mOut[0]")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = OUTPUT;
-	PARENT = "x";
+	PARENT = "mOut";
 }
 
-SIGNAL("x[3]")
+SIGNAL("v")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = OUTPUT;
-	PARENT = "x";
+	PARENT = "";
 }
 
-SIGNAL("x[2]")
-{
-	VALUE_TYPE = NINE_LEVEL_BIT;
-	SIGNAL_TYPE = SINGLE_BIT;
-	WIDTH = 1;
-	LSB_INDEX = -1;
-	DIRECTION = OUTPUT;
-	PARENT = "x";
-}
-
-SIGNAL("x[1]")
-{
-	VALUE_TYPE = NINE_LEVEL_BIT;
-	SIGNAL_TYPE = SINGLE_BIT;
-	WIDTH = 1;
-	LSB_INDEX = -1;
-	DIRECTION = OUTPUT;
-	PARENT = "x";
-}
-
-SIGNAL("x[0]")
-{
-	VALUE_TYPE = NINE_LEVEL_BIT;
-	SIGNAL_TYPE = SINGLE_BIT;
-	WIDTH = 1;
-	LSB_INDEX = -1;
-	DIRECTION = OUTPUT;
-	PARENT = "x";
-}
-
-TRANSITION_LIST("m[3]")
+TRANSITION_LIST("mIn[3]")
 {
 	NODE
 	{
@@ -229,7 +197,7 @@ TRANSITION_LIST("m[3]")
 	}
 }
 
-TRANSITION_LIST("m[2]")
+TRANSITION_LIST("mIn[2]")
 {
 	NODE
 	{
@@ -242,7 +210,7 @@ TRANSITION_LIST("m[2]")
 	}
 }
 
-TRANSITION_LIST("m[1]")
+TRANSITION_LIST("mIn[1]")
 {
 	NODE
 	{
@@ -259,7 +227,7 @@ TRANSITION_LIST("m[1]")
 	}
 }
 
-TRANSITION_LIST("m[0]")
+TRANSITION_LIST("mIn[0]")
 {
 	NODE
 	{
@@ -284,7 +252,7 @@ TRANSITION_LIST("m[0]")
 	}
 }
 
-TRANSITION_LIST("x[7]")
+TRANSITION_LIST("mOut[3]")
 {
 	NODE
 	{
@@ -293,7 +261,7 @@ TRANSITION_LIST("x[7]")
 	}
 }
 
-TRANSITION_LIST("x[6]")
+TRANSITION_LIST("mOut[2]")
 {
 	NODE
 	{
@@ -302,7 +270,7 @@ TRANSITION_LIST("x[6]")
 	}
 }
 
-TRANSITION_LIST("x[5]")
+TRANSITION_LIST("mOut[1]")
 {
 	NODE
 	{
@@ -311,7 +279,7 @@ TRANSITION_LIST("x[5]")
 	}
 }
 
-TRANSITION_LIST("x[4]")
+TRANSITION_LIST("mOut[0]")
 {
 	NODE
 	{
@@ -320,34 +288,7 @@ TRANSITION_LIST("x[4]")
 	}
 }
 
-TRANSITION_LIST("x[3]")
-{
-	NODE
-	{
-		REPEAT = 1;
-		LEVEL X FOR 1000.0;
-	}
-}
-
-TRANSITION_LIST("x[2]")
-{
-	NODE
-	{
-		REPEAT = 1;
-		LEVEL X FOR 1000.0;
-	}
-}
-
-TRANSITION_LIST("x[1]")
-{
-	NODE
-	{
-		REPEAT = 1;
-		LEVEL X FOR 1000.0;
-	}
-}
-
-TRANSITION_LIST("x[0]")
+TRANSITION_LIST("v")
 {
 	NODE
 	{
@@ -358,7 +299,7 @@ TRANSITION_LIST("x[0]")
 
 DISPLAY_LINE
 {
-	CHANNEL = "m";
+	CHANNEL = "mIn";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 0;
@@ -368,7 +309,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "m[3]";
+	CHANNEL = "mIn[3]";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 1;
@@ -378,7 +319,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "m[2]";
+	CHANNEL = "mIn[2]";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 2;
@@ -388,7 +329,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "m[1]";
+	CHANNEL = "mIn[1]";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 3;
@@ -398,7 +339,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "m[0]";
+	CHANNEL = "mIn[0]";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 4;
@@ -408,17 +349,17 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "x";
+	CHANNEL = "mOut";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 5;
 	TREE_LEVEL = 0;
-	CHILDREN = 6, 7, 8, 9, 10, 11, 12, 13;
+	CHILDREN = 6, 7, 8, 9;
 }
 
 DISPLAY_LINE
 {
-	CHANNEL = "x[7]";
+	CHANNEL = "mOut[3]";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 6;
@@ -428,7 +369,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "x[6]";
+	CHANNEL = "mOut[2]";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 7;
@@ -438,7 +379,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "x[5]";
+	CHANNEL = "mOut[1]";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 8;
@@ -448,7 +389,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "x[4]";
+	CHANNEL = "mOut[0]";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 9;
@@ -458,47 +399,16 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "x[3]";
+	CHANNEL = "v";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 10;
-	TREE_LEVEL = 1;
-	PARENT = 5;
-}
-
-DISPLAY_LINE
-{
-	CHANNEL = "x[2]";
-	EXPAND_STATUS = COLLAPSED;
-	RADIX = Binary;
-	TREE_INDEX = 11;
-	TREE_LEVEL = 1;
-	PARENT = 5;
-}
-
-DISPLAY_LINE
-{
-	CHANNEL = "x[1]";
-	EXPAND_STATUS = COLLAPSED;
-	RADIX = Binary;
-	TREE_INDEX = 12;
-	TREE_LEVEL = 1;
-	PARENT = 5;
-}
-
-DISPLAY_LINE
-{
-	CHANNEL = "x[0]";
-	EXPAND_STATUS = COLLAPSED;
-	RADIX = Binary;
-	TREE_INDEX = 13;
-	TREE_LEVEL = 1;
-	PARENT = 5;
+	TREE_LEVEL = 0;
 }
 
 TIME_BAR
 {
-	TIME = 80000;
+	TIME = 0;
 	MASTER = TRUE;
 }
 ;
