@@ -22,7 +22,7 @@ https://fpgasoftware.intel.com/eula.
 (header "graphic" (version "1.4"))
 (pin
 	(input)
-	(rect 224 192 392 208)
+	(rect 216 152 384 168)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
 	(text "mIn[3..0]" (rect 5 0 50 12)(font "Arial" ))
 	(pt 168 8)
@@ -38,7 +38,7 @@ https://fpgasoftware.intel.com/eula.
 )
 (pin
 	(output)
-	(rect 832 208 1008 224)
+	(rect 800 168 976 184)
 	(text "OUTPUT" (rect 1 0 39 10)(font "Arial" (font_size 6)))
 	(text "v" (rect 90 0 97 12)(font "Arial" ))
 	(pt 0 8)
@@ -54,7 +54,7 @@ https://fpgasoftware.intel.com/eula.
 )
 (pin
 	(output)
-	(rect 832 192 1008 208)
+	(rect 800 152 976 168)
 	(text "OUTPUT" (rect 1 0 39 10)(font "Arial" (font_size 6)))
 	(text "mOut[3..0]" (rect 90 0 140 17)(font "Intel Clear" ))
 	(pt 0 8)
@@ -69,7 +69,7 @@ https://fpgasoftware.intel.com/eula.
 	)
 )
 (symbol
-	(rect 680 168 832 248)
+	(rect 648 128 800 208)
 	(text "Parallel4BitDecoder" (rect 5 0 100 12)(font "Arial" ))
 	(text "inst" (rect 8 64 25 76)(font "Arial" ))
 	(port
@@ -98,9 +98,9 @@ https://fpgasoftware.intel.com/eula.
 	)
 )
 (symbol
-	(rect 392 168 544 248)
+	(rect 392 128 544 208)
 	(text "Parallel4BitEncoder" (rect 5 0 99 12)(font "Arial" ))
-	(text "inst2" (rect 8 64 30 81)(font "Intel Clear" ))
+	(text "inst1" (rect 8 64 30 81)(font "Intel Clear" ))
 	(port
 		(pt 0 32)
 		(input)
@@ -120,7 +120,12 @@ https://fpgasoftware.intel.com/eula.
 	)
 )
 (connector
-	(pt 544 200)
-	(pt 680 200)
+	(pt 544 160)
+	(pt 648 160)
+	(bus)
+)
+(connector
+	(pt 392 160)
+	(pt 384 160)
 	(bus)
 )
