@@ -101,8 +101,8 @@ USE PopCounter8bit.all;
 ENTITY m3_bit_decoder IS
 	PORT (m     : IN STD_LOGIC_VECTOR(3 downto 0);
 			y     : IN STD_LOGIC_VECTOR(7 downto 0);
-			m3    : OUT STD_LOGIC;
-			valid : IN STD_LOGIC);
+			valid : IN STD_LOGIC;
+			m3    : OUT STD_LOGIC);
 END m3_bit_decoder;
 
 ARCHITECTURE structure OF m3_bit_decoder IS
@@ -180,26 +180,39 @@ ARCHITECTURE structure OF Parallel4BitDecoder IS
 	
 	-- decoding computation bits for m3
 	SIGNAL m3_o: STD_LOGIC;
+	SIGNAL m3_e: STD_LOGIC;
 	SIGNAL m3_V: STD_LOGIC;
 	
 	-- decoding computation bits for m2
 	SIGNAL m2_o: STD_LOGIC;
+	SIGNAL m2_e: STD_LOGIC;
 	SIGNAL m2_V: STD_LOGIC;
 	
 	-- decoding computation bits for m1
 	SIGNAL m1_o: STD_LOGIC;
+	SIGNAL m1_e: STD_LOGIC;
 	SIGNAL m1_V: STD_LOGIC;
 	
 	-- decoding computation bits for m0
 	SIGNAL m0_o: STD_LOGIC;
 	SIGNAL m0_V: STD_LOGIC;
+	SIGNAL m0_t: STD_LOGIC;
+	SIGNAL m0_te: STD_LOGIC;
 	
 	-- gate component
 	COMPONENT gateAnd4
 		PORT (x1, x2, x3, x4: IN  STD_LOGIC;
 				y				  : OUT STD_LOGIC);
 	END COMPONENT;
-	
+	COMPONENT gateOr2
+	PORT (x1, x2 : IN  STD_LOGIC;
+			y:			OUT STD_LOGIC);
+	END COMPONENT;
+	COMPONENT gateNot
+		PORT (x: IN  STD_LOGIC;
+				y:	OUT STD_LOGIC);
+	END COMPONENT;
+
 	-- concat components
 	COMPONENT concatenator4to1
 		PORT(x1, x2, x3, x4 : IN  STD_LOGIC;
@@ -230,6 +243,10 @@ BEGIN
 	m1	: bit_decoder PORT MAP (x(0), x(4), x(1), x(5), x(2), x(6), x(3), x(7), m1_o, m1_v);
 
 	-- m0 computations
+	v3_e : gateOr2 PORT MAP(m3_e, m2_e, m0_t);
+	v2_e: gateOr2 PORT MAP(m1_e,m0_t, m0_te);
+	v1_e: gateNot PORT MAP(m0_te, m0_v);
+	
 	m0 : m3_bit_decoder PORT MAP (m3_o & m2_o & m1_o & '0', x, m0_o, m0_v);
 	-- final results
 	m <= m3_o & m2_o & m1_o & m0_o;
