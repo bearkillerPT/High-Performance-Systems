@@ -73,11 +73,11 @@ int main (int argc, char **argv)
   */
   unsigned int gridDimX,gridDimY,gridDimZ,blockDimX,blockDimY,blockDimZ;
 
-  blockDimX = 1 << 0;                                             // optimize!
+  blockDimX = 2;                                             // optimize!
   blockDimY = 1 << 0;                                             // optimize!
   blockDimZ = 1 << 0;                                             // do not change!
-  gridDimX = 1 << 10;                                             // optimize!
-  gridDimY = 1 << 0;                                              // optimize!
+  gridDimX = 128;                                             // optimize!
+  gridDimY = 4;                                              // optimize!
   gridDimZ = 1 << 0;                                              // do not change!
 
   dim3 grid (gridDimX, gridDimY, gridDimZ);
